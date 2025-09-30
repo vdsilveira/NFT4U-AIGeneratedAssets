@@ -2,17 +2,17 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {ForuNFT} from "../src/ForuNFT.sol";
 
 contract CounterScript is Script {
-    Counter public counter;
+    ForuNFT public foruNFT;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Counter();
+        foruNFT = new ForuNFT();
 
         vm.stopBroadcast();
     }
