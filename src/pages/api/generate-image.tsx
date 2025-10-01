@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 2️⃣ Polling para verificar se a imagem ficou pronta
     let imageData = null;
-    for (let i = 0; i < 100; i++) { // tenta por 60 vezes (aprox 10 minutos)
+    for (let i = 0; i < 100; i++) { // tenta por 100 vezes (aprox 10 minutos)
       const pollResponse = await fetch(`http://localhost:8000/image/${job_id}`);
       const data = await pollResponse.json();
       if (data.status === "done") {

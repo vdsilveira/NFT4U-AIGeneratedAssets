@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi';
 import { useEffect } from 'react';
 
 import styles from '../styles/Home.module.css';
-// import Logo from '.logo';
+import Logo from './logos';
 
 const Home: NextPage = () => {
   const { isConnected } = useAccount();
@@ -35,15 +35,14 @@ const Home: NextPage = () => {
         left: '1rem',
         zIndex: 1000,
       }}>
-        <ConnectButton />
+        
       </div>
 
       <main className={styles.main}>
-        {/* <Logo /> */}
+         <Logo /> 
+        
 
-        <h1 className={styles.title}>
-          Welcome to the AI platform for creating unique, non-fungible digital assets.
-        </h1>
+       
       </main>
 
       <footer className={styles.footer}>
