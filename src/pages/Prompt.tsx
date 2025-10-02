@@ -1,18 +1,25 @@
-// components/Prompt.tsx
 import React, { useState } from "react";
+import useBlockchain from "../lib/blockchain/useBlockchain"; // hook com mintToken
+import Connections from "../lib/blockchain/networkSelect";
 
 
 interface PromptProps {
-  onSubmit: (prompt: string) => Promise<string>; // retorna a imagem Base64
+  onSubmit: (prompt: string) => Promise<string>; // retorna imagem Base64
 }
 
 const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [ipfsUrl, setIpfsUrl] = useState<string | null>(null);
+  const [showAmountInput, setShowAmountInput] = useState(false);
+  const [amount, setAmount] = useState<number>(1);
+   const address= Connections();
 
-  // Envia o prompt para gerar imagem
+  const { mintToken } = useBlockchain(address);
+
+  
+
+  // Gera imagem do prompt
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -23,39 +30,56 @@ const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
       setImageUrl(base64Url);
       setPrompt("");
     } catch (err) {
-      console.error("Erro ao enviar prompt:", err);
+      console.error("Erro ao gerar imagem:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMint = async () => {
-  if (!imageUrl) return;
+  // Abre caixa de quantidade
+  const handleMintClick = () => {
+    setShowAmountInput(true);
+  };
 
-  setLoading(true);
-  try {
-    const res = await fetch("/api/upload-ipfs", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: imageUrl }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setIpfsUrl(data.url);
-    } else {
-      console.error("Erro ao enviar para IPFS:", data.error);
+  // Mint NFT chamando blockchain
+  const handleMintConfirm = async () => {
+    if (!imageUrl) return;
+    if (!mintToken) {
+      alert("Conecte sua carteira primeiro!");
+      return;
     }
-  } catch (err) {
-    console.error("Erro ao enviar para IPFS:", err);
-  } finally {
-    setLoading(false);
-  }
-};
 
+    setLoading(true);
+    try {
+      // Envia imagem para IPFS
+      const res = await fetch("/api/upload-ipfs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imageUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro ao enviar para IPFS");
+
+      const ipfsUrl = data.url;
+
+      // Chama mintToken
+      const txHash = await mintToken(amount, ipfsUrl);
+      alert(`NFT(s) mintado(s) com sucesso! TX: ${txHash}`);
+      setShowAmountInput(false);
+      setImageUrl(null);
+    setShowAmountInput(false);
+    } catch (err) {
+      console.error("Erro ao mintar NFT:", err);
+      alert("Erro ao mintar NFT, veja console.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleReset = () => {
     setImageUrl(null);
-    setIpfsUrl(null);
+    setShowAmountInput(false);
+    setAmount(1);
   };
 
   return (
@@ -127,12 +151,8 @@ const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
               animation: spin 1s linear infinite;
             }
             @keyframes spin {
-              0% {
-                transform: rotate(0deg);
-              }
-              100% {
-                transform: rotate(360deg);
-              }
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
             }
           `}</style>
         </form>
@@ -166,27 +186,56 @@ const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
               Try Again
             </button>
 
-            <button
-              onClick={handleMint}
-              style={{
-                padding: "0.5rem 1rem",
-                fontSize: "0.9rem",
-                borderRadius: "8px",
-                border: "none",
-                backgroundColor: "#10b981",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            >
-              Mint NFT
-            </button>
-          </div>
+            {!showAmountInput && (
+              <button
+                onClick={handleMintClick}
+                style={{
+                  padding: "0.5rem 1rem",
+                  fontSize: "0.9rem",
+                  borderRadius: "8px",
+                  border: "none",
+                  backgroundColor: "#10b981",
+                  color: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                Mint NFT
+              </button>
+            )}
 
-          {ipfsUrl && (
-            <p style={{ marginTop: "1rem", wordBreak: "break-all" }}>
-              IPFS URL: <a href={ipfsUrl} target="_blank" rel="noreferrer">{ipfsUrl}</a>
-            </p>
-          )}
+            {showAmountInput && (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <input
+                  type="number"
+                  min={1}
+                  value={amount}
+                  onChange={(e) => setAmount(parseInt(e.target.value))}
+                  style={{
+                    width: "80px",
+                    padding: "0.25rem 0.5rem",
+                    borderRadius: "6px",
+                    border: "1px solid #d1d5db",
+                    textAlign: "center",
+                  }}
+                />
+                <button
+                  onClick={handleMintConfirm}
+                  disabled={loading}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    fontSize: "0.9rem",
+                    borderRadius: "8px",
+                    border: "none",
+                    backgroundColor: "#10b981",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  {loading ? "Mintando..." : "Confirmar"}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

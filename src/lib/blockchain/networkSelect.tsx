@@ -1,29 +1,31 @@
 import { useEffect, useState } from "react";
 import { useAccount, useChainId } from "wagmi";
 
-const Connections = () => {
+const Connections = (): string => {
   const { isConnected } = useAccount();
   const chainId = useChainId();
   const [contractAddress, setContractAddress] = useState("");
-  const [rpcUrl, setRpcUrl] = useState("");
 
   useEffect(() => {
-    if (!isConnected) return;
+    if (!isConnected) {
+      setContractAddress("");
+      return;
+    }
 
-    if (chainId === 11155111) { // Sepolia
-      setContractAddress(process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT as string);
-      setRpcUrl(process.env.NEXT_PUBLIC_SEPOLIA_RPC as string);
-    } else if (chainId === 80002) { // Amoy
-      setContractAddress(process.env.NEXT_PUBLIC_AMOY_CONTRACT as string);
-      setRpcUrl(process.env.NEXT_PUBLIC_AMOY_RPC as string);
-    } else {
-      alert("Please connect to Sepolia or Amoy network");
+    switch (chainId) {
+      case 11155111: // Sepolia
+        setContractAddress(process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT || "");
+        break;
+      case 80002: // Amoy
+        setContractAddress(process.env.NEXT_PUBLIC_AMOY_CONTRACT || "");
+        break;
+      default:
+        alert("Please connect to Sepolia or Amoy network");
+        setContractAddress("");
     }
   }, [isConnected, chainId]);
 
-  return (
-    { contractAddress, rpcUrl }
-  );
+  return contractAddress;
 };
 
 export default Connections;

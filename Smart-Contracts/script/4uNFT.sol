@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Script, console} from "forge-std/Script.sol";
+import "lib/forge-std/src/Script.sol";
 import {ForuNFT} from "../src/ForuNFT.sol";
 
 contract ForuNFTScript is Script {
