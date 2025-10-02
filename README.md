@@ -1,9 +1,31 @@
 # Setting Up Stable Diffusion 2.1 on Google Colab
+## Prerequisites
+- **Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
+  ```bash
+  node -v
+  npm -v
+  ```
+- **Python**: Install Python 3.8+ from [python.org](https://www.python.org/). Verify with:
+  ```bash
+  python3 --version
+  ```
+- **Uvicorn and dependencies**: Ensure Uvicorn and Stable Diffusion dependencies are installed (see setup below).
+- Clone this repository and switch to the branch for Stable Diffusion v1.5.
 
-## Getting Started
+## Setup Instructions
 
-To begin, run the development server:
+### Step 1: Install Project Dependencies
 
+1. Install Next.js, which is required for the development server:
+   ```bash
+   npm install next
+   ```
+2. Install other project dependencies (if not already installed):
+   ```bash
+   npm install
+   ```
+
+### Step 2: Run the Development Server
 ```bash
 npm run dev
 ```
