@@ -1,6 +1,6 @@
 # Setting Up Stable Diffusion 2.1 on Google Colab
 ## Prerequisites
--**Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
+- **Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
   ```bash
   node -v
   npm -v
