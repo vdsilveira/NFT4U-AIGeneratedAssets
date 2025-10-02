@@ -1,6 +1,6 @@
 // src/pages/api/upload-ipfs.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import { POST_Ipfs } from "../../lib/IPfs_registry";
+import { POST_Ipfs } from "../../lib/IPFS/IPfs_registry";
 
 
 export const config = {
