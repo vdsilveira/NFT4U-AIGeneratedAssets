@@ -1,10 +1,14 @@
 # Setting Up Stable Diffusion 2.1 on Google Colab
 ## Prerequisites
-- **Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
+-**Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
   ```bash
   node -v
   npm -v
   ```
+- **Google Colab Account**: Ensure you have access to [Google Colab](https://colab.research.google.com/).
+- **Ngrok Account**: Sign up at [ngrok.com](https://ngrok.com/) to obtain an Authtoken.
+- **Python**: Google Colab provides Python 3.8+, but ensure required libraries (e.g., `pyngrok`) are installed in the Colab environment.
+
 - **Python**: Install Python 3.8+ from [python.org](https://www.python.org/). Verify with:
   ```bash
   python3 --version
