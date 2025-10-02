@@ -1,29 +1,48 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](/packages/create-rainbowkit).
+# Stable Diffusion v1.5 - Local Setup
+
+This guide explains how to set up and run Stable Diffusion v1.5 locally on your machine.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Ensure you have the necessary dependencies installed, including Python, Uvicorn, and the required model libraries.
+- Clone the repository and switch to the branch for Stable Diffusion v1.5.
 
-```bash
-npm run dev
-```
+### Running the Development Server
+1. Open a terminal and navigate to the project directory.
+2. Start the development server by running:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser to view the result.
 
-## Learn More
+### Running the Local Model Server
+1. Open a **separate terminal** (different from the one used for `npm run dev`).
+2. Navigate to the `IA-model` directory:
 
-To learn more about this stack, take a look at the following resources:
+   ```bash
+   cd IA-model/
+   ```
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
+3. Start the Uvicorn server with the following command:
 
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
+   ```bash
+   uvicorn server:app --host 0.0.0.0 --port 8000
+   ```
 
-## Deploy on Vercel
+4. Once the server starts, you will see an output similar to this:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   Loading pipeline components...: 100% 7/7 [00:00<00:00, 17.64it/s]
+   INFO:     Started server process [1622872]
+   INFO:     Waiting for application startup.
+   INFO:     Application startup complete.
+   INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+   ```
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5. The model is now running locally and accessible at [http://0.0.0.0:8000](http://0.0.0.0:8000).
+
+## Conclusion
+Your Stable Diffusion v1.5 instance is now running locally. Ensure both the development server and the Uvicorn server are active to interact with the model.
