@@ -1,22 +1,43 @@
 # Stable Diffusion v1.5 - Local Setup
 
-This guide explains how to set up and run Stable Diffusion v1.5 locally on your machine.
+This repository contains the setup for running Stable Diffusion v1.5 locally to power the NFT4U AI-Generated Assets Platform, an AI-driven solution for creating and managing digital assets for NFTs.
 
-## Getting Started
+## Prerequisites
+- **Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
+  ```bash
+  node -v
+  npm -v
+  ```
+- **Python**: Install Python 3.8+ from [python.org](https://www.python.org/). Verify with:
+  ```bash
+  python3 --version
+  ```
+- **Uvicorn and dependencies**: Ensure Uvicorn and Stable Diffusion dependencies are installed (see setup below).
+- Clone this repository and switch to the branch for Stable Diffusion v1.5.
 
-### Prerequisites
-- Ensure you have the necessary dependencies installed, including Python, Uvicorn, and the required model libraries.
-- Clone the repository and switch to the branch for Stable Diffusion v1.5.
+## Setup Instructions
 
-### Running the Development Server
-1. Open a terminal and navigate to the project directory.
-2. Start the development server by running:
+### Step 1: Install Project Dependencies
+1. Navigate to the project directory:
+   ```bash
+   cd ~/Projetos/projetos_pessoais/NFT4U-AIGeneratedAssets
+   ```
+2. Install Next.js, which is required for the development server:
+   ```bash
+   npm install next
+   ```
+3. Install other project dependencies (if not already installed):
+   ```bash
+   npm install
+   ```
 
+### Step 2: Run the Development Server
+1. Start the Next.js development server:
    ```bash
    npm run dev
    ```
+2. Open [http://localhost:3000](http://localhost:3000) in your browser to view the result.
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser to view the result.
 
 ### Running the Local Model Server
 1. Open a **separate terminal** (different from the one used for `npm run dev`).
