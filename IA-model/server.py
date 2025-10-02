@@ -10,7 +10,7 @@ import uuid
 app = FastAPI()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5")
+pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-2-1")
 pipe = pipe.to(device)
 
 jobs = {}  # {job_id: base64_image or None}
