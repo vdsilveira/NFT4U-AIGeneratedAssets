@@ -8,12 +8,12 @@ import { useEffect, useState } from 'react';
 
 import styles from '../styles/Home.module.css';
 import Prompt from './Prompt';
+import ButtonPage from '../components/button';
 
 const Dashboard: NextPage = () => {
   const { isConnected } = useAccount();
   const router = useRouter();
 
-  // Estados do Prompt
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +24,7 @@ const Dashboard: NextPage = () => {
     }
   }, [isConnected, router]);
 
-  // Função que chama o backend e retorna a URL da imagem
+  // Chamada para gerar imagem
   const handlePromptSubmit = async (prompt: string): Promise<string> => {
     setLoading(true);
     try {
@@ -36,7 +36,7 @@ const Dashboard: NextPage = () => {
 
       const data = await res.json();
       if (data.url) {
-        setImageUrl(data.url); // salva a imagem no estado
+        setImageUrl(data.url);
         return data.url;
       } else {
         console.error("Nenhuma imagem retornada");
@@ -59,17 +59,18 @@ const Dashboard: NextPage = () => {
       <main className={styles.main}>
         <div style={{
           position: 'absolute',
-          top: '1rem',    
-          left: '1rem',  
-          zIndex: 1000,   
+          top: '1rem',
+          left: '1rem',
+          zIndex: 1000,
         }}>
           <ConnectButton />
+          <ButtonPage />
         </div>
 
-        {/* Prompt centralizado e estilizado */}
-        <Prompt onSubmit={handlePromptSubmit} />
 
-        {/* A imagem agora já é controlada pelo Prompt */}
+
+        {/* Prompt centralizado */}
+        <Prompt onSubmit={handlePromptSubmit} />
       </main>
 
       <footer className={styles.footer}>

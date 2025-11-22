@@ -1,0 +1,116 @@
+# ---------------- Instalação ----------------
+!pip install -q pyngrok diffusers transformers accelerate safetensors uvicorn nest_asyncio fastapi
+
+# ---------------- Importações ----------------
+from fastapi import FastAPI, BackgroundTasks
+from pydantic import BaseModel
+from diffusers import AutoPipelineForText2Image
+import torch
+import base64
+from io import BytesIO
+import uuid
+import nest_asyncio
+import uvicorn
+from pyngrok import ngrok
+import threading
+import os
+import random
+
+# Permite FastAPI no Colab
+nest_asyncio.apply()
+
+# ---------------- Configurações ----------------
+app = FastAPI()
+
+# Tokens
+HF_TOKEN = "SEU_TOKEN_HUGGINGFACE"    # <--- substitua
+NGROK_AUTH_TOKEN = "SEU_TOKEN_NGROK"  # <--- substitua
+
+os.environ["HF_TOKEN"] = HF_TOKEN
+
+# Device
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"[INFO] Device: {device}")
+
+# ---------------- Carregar SDXL Turbo ----------------
+print("[INFO] Loading SDXL Turbo...")
+
+pipe = AutoPipelineForText2Image.from_pretrained(
+    "stabilityai/sdxl-turbo",
+    torch_dtype=torch.float16 if device == "cuda" else torch.float32,
+    token=HF_TOKEN
+)
+
+pipe = pipe.to(device)
+
+# tornar mais leve
+pipe.enable_attention_slicing()
+pipe.enable_sequential_cpu_offload()
+
+print("[INFO] SDXL Turbo loaded successfully.")
+
+# ---------------- Sistema de Jobs ----------------
+jobs = {}  # {job_id: base64_image or None}
+
+class Prompt(BaseModel):
+    prompt: str
+
+# ---------------- Função de Geração ----------------
+def generate_image_job(prompt: str, job_id: str):
+    try:
+        print(f"[JOB] Starting: {job_id}")
+
+        result = pipe(
+            prompt,
+            num_inference_steps=4,   # Turbo: recomendado entre 2 e 6
+            guidance_scale=0.0       # Em Turbo guidance_scale não afeta muito
+        )
+
+        image = result.images[0]
+
+        buffer = BytesIO()
+        image.save(buffer, format="PNG")
+
+        img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        jobs[job_id] = img_str
+
+        print(f"[JOB] Completed: {job_id}")
+
+    except Exception as e:
+        jobs[job_id] = f"ERROR: {str(e)}"
+        print(f"[JOB] FAILED: {job_id} — {str(e)}")
+
+# ---------------- Rotas da API ----------------
+@app.post("/generate-image")
+async def generate_image(data: Prompt, background_tasks: BackgroundTasks):
+    job_id = str(uuid.uuid4())
+    jobs[job_id] = None
+    background_tasks.add_task(generate_image_job, data.prompt, job_id)
+    return {"job_id": job_id}
+
+@app.get("/image/{job_id}")
+async def get_image(job_id: str):
+    if job_id not in jobs:
+        return {"status": "error", "error": "Invalid Job ID"}
+
+    if jobs[job_id] is None:
+        return {"status": "pending"}
+
+    if str(jobs[job_id]).startswith("ERROR"):
+        return {"status": "error", "error": jobs[job_id]}
+
+    return {"status": "done", "image": jobs[job_id]}
+
+# ---------------- NGROK ----------------
+ngrok.set_auth_token(NGROK_AUTH_TOKEN)
+
+PORT = random.randint(8000, 8999)
+public_url = ngrok.connect(PORT)
+print(f"[INFO] Public API available at: {public_url}")
+
+# ---------------- Servidor ----------------
+def start_server():
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
+
+thread = threading.Thread(target=start_server)
+thread.start()

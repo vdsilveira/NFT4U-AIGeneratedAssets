@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useBlockchain from "../lib/blockchain/useBlockchain"; // hook com mintToken
+import useBlockchain from "../lib/blockchain/useBlockchain"; 
 import Connections from "../lib/blockchain/networkSelect";
 
 

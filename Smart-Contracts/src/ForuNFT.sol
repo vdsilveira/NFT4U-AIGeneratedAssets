@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol";
-import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ForuNFT is ERC1155, Ownable {
     constructor() ERC1155("") Ownable(msg.sender) {}
@@ -11,6 +11,7 @@ contract ForuNFT is ERC1155, Ownable {
     uint256 public fee = 0.001 ether;
 
     mapping(uint256 => string) private _tokenURIs;
+    mapping(address=>uint256[]) private _userTokens;
 
     event Minted(address indexed minter, uint256 indexed tokenId, uint256 amount, string uri);
     event FeeUpdated(uint256 newFee);
@@ -40,8 +41,12 @@ contract ForuNFT is ERC1155, Ownable {
         _tokenURIs[idCounter] = link;
 
         _mint(msg.sender, idCounter, amount, data);
+        _userTokens[msg.sender].push(idCounter);
 
         emit Minted(msg.sender, idCounter, amount, link);
+    }
+    function getTokens(address user) public view returns (uint256[] memory) {
+    return _userTokens[user];
     }
 
     function withdraw() external onlyOwner {

@@ -7,16 +7,17 @@ import { useAccount } from 'wagmi';
 import { useEffect } from 'react';
 
 import styles from '../styles/Home.module.css';
-import Logo from '../components/logos';
+import ButtonPage from '../components/button';
+import NftCard from '../components/NftCard';
 
-const Home: NextPage = () => {
+const AssetsDashborad: NextPage = () => {
   const { isConnected } = useAccount();
   const router = useRouter();
 
   // Redireciona para home se desconectar
   useEffect(() => {
-    if (isConnected) {
-      router.push('/dashboard');
+    if (!isConnected) {
+      router.push('/');
     }
   }, [isConnected, router]);
 
@@ -24,25 +25,24 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Head>
         <title>NFT 4U</title>
-        <meta name="description" content="NFT 4U - AI platform for creating unique NFTs" />
-        <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      {/* Botão de conectar no canto superior esquerdo */}
+      {/* Botões fixos no topo */}
       <div style={{
         position: 'absolute',
         top: '1rem',
         left: '1rem',
         zIndex: 1000,
+        display: 'flex',
+        gap: '1rem'
       }}>
-        
+        <ConnectButton />
+        <ButtonPage />
       </div>
 
       <main className={styles.main}>
-         <Logo /> 
-        
-
-       
+        {/* Container centralizado para NFTs */}
+        <NftCard />
       </main>
 
       <footer className={styles.footer}>
@@ -59,4 +59,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default AssetsDashborad;

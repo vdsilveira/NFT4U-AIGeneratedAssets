@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAccount, useChainId } from "wagmi";
 
-const Connections = (): string => {
+const useConnections = (): string => {
   const { isConnected } = useAccount();
   const chainId = useChainId();
   const [contractAddress, setContractAddress] = useState("");
@@ -16,9 +16,11 @@ const Connections = (): string => {
       case 11155111: // Sepolia
         setContractAddress(process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT || "");
         break;
+
       case 80002: // Amoy
         setContractAddress(process.env.NEXT_PUBLIC_AMOY_CONTRACT || "");
         break;
+
       default:
         alert("Please connect to Sepolia or Amoy network");
         setContractAddress("");
@@ -28,4 +30,4 @@ const Connections = (): string => {
   return contractAddress;
 };
 
-export default Connections;
+export default useConnections;
