@@ -1,81 +1,127 @@
-# Setting Up Stable Diffusion 2.1 on Google Colab
-## Prerequisites
-- **Node.js and npm**: Install Node.js (LTS version, e.g., 18.x or 20.x) from [nodejs.org](https://nodejs.org/). Verify with:
-  ```bash
-  node -v
-  npm -v
-  ```
-- **Google Colab Account**: Ensure you have access to [Google Colab](https://colab.research.google.com/).
-- **Ngrok Account**: Sign up at [ngrok.com](https://ngrok.com/) to obtain an Authtoken.
-- **Python**: Google Colab provides Python 3.8+, but ensure required libraries (e.g., `pyngrok`) are installed in the Colab environment.
+```markdown
+# NFT 4U – AI Generated NFT Creator
+**IA382A – Seminars in Computer Engineering**
 
-- **Python**: Install Python 3.8+ from [python.org](https://www.python.org/). Verify with:
-  ```bash
-  python3 --version
-  ```
-- **Uvicorn and dependencies**: Ensure Uvicorn and Stable Diffusion dependencies are installed (see setup below).
-- Clone this repository and switch to the branch for Stable Diffusion v1.5.
+## 📌 Project Description
 
-## Setup Instructions
+This project was developed as the final assignment for the course **IA382A – Seminars in Computer Engineering**, based on the seminar “*Overview of Blockchain: Concepts, Applications, and Relevant Initiatives*”.
 
-### Step 1: Install Project Dependencies
+The main goal is to demonstrate, in a practical and fully functional way, the **integration of Artificial Intelligence and 
+Blockchain** to create an innovative digital product.
 
-1. Install Next.js, which is required for the development server:
-   ```bash
-   npm install next
-   ```
-2. Install other project dependencies (if not already installed):
-   ```bash
-   npm install
-   ```
+## 🎥 Demo Video
 
-### Step 2: Run the Development Server
+
+[![Demonstração em vídeo](https://www.youtube.com/watch?v=Uxuyz1IH6UA)](https://www.youtube.com/watch?v=Uxuyz1IH6UA)
+
+
+### ✨ dApp Features
+
+1. **AI Image Generation**  
+   Users submit text prompts to state-of-the-art generative models:
+   - Stable Diffusion v1.5
+   - Stable Diffusion 2.1
+   - SDXL Turbo (final version – high speed and quality)
+
+2. **Unique Digital Artwork Creation**  
+   The AI generates a 100% original image based on the prompt.
+
+3. **NFT Minting**  
+   The generated image can be minted as an NFT using smart contracts, ensuring:
+   - Immutable ownership
+   - Verifiable authenticity
+   - Full traceability
+   - Digital scarcity
+
+4. **AI-Generated Branding**  
+   The entire branding, logos, and visual identity of the project were also created using AI tools, reinforcing the concept of complete AI–Blockchain integration.
+
+## 🔀 Branch History & Tested Models
+
+During development, different branches were created to test various models and execution environments:
+
+| Branch                          | Description                                              | Environment     |
+|---------------------------------|----------------------------------------------------------|-----------------|
+| `local-model-diffusion-v1-5`    | Stable Diffusion 1.5 running locally                     | CPU             |
+| `diffusion-2.1-on-google-colab` | Stable Diffusion 2.1 with GPU acceleration               | Google Colab    |
+| `main_sdxl-turbo`               | **Final version** – SDXL Turbo (high speed + quality)    | Google Colab + GPU |
+
+Each branch documents the lessons learned regarding performance, image quality, and execution feasibility.
+
+## 🚀 How to Run the Project
+
+### 🟦 1. Frontend (Next.js)
+
+#### Prerequisites
+- Node.js 18.x or 20.x
+- npm or yarn
+- Git
+- Code editor (VS Code recommended)
+
+#### Steps
+
 ```bash
+# Check versions
+node -v
+npm -v
+
+# Clone and enter the project
+git clone <your-repository>
+cd nft-4u
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the result.
+Open: **http://localhost:3000**
 
-## Configuration in Google Colab
+### 🤖 2. AI Backend (Google Colab + FastAPI + SDXL Turbo)
 
-1. **Access Google Colab**  
-   Open the following link in your browser:  
-   [https://colab.research.google.com/](https://colab.research.google.com/)
+#### Step-by-step
 
-2. **Add the Code**  
-   Copy and paste the code from the `__GoogleColab.py__` file into a cell in Google Colab. Ensure you select the GPU runtime environment.
+1. Go to: https://colab.research.google.com/
+2. Create a new notebook
+3. Paste the entire content of the file `GoogleColab.py` into a cell
+4. **Important**: `Runtime > Change runtime type > Hardware accelerator > GPU`
+5. Set up NGROK:
+   - Create an account at https://ngrok.com
+   - Copy your **Authtoken**
+   - Replace in the code:
+     ```python
+     NGROK_AUTH_TOKEN = "YOUR_TOKEN_HERE"
+     ```
+6. Run the cell
 
-3. **Set Up Ngrok**  
-   - Visit [ngrok.com](https://ngrok.com/) and copy your **Authtoken**.  
-   - In the `__GoogleColab.py__` file, replace `[YOUR_AUTH_TOKEN_NGROK]` with your token in the following section:
+You should see something like:
+```
+[INFO] Using device: cuda
+Loading pipeline components...: 100%
+[INFO] Public URL: NgrokTunnel: "https://abcd1234.ngrok-free.app"
+INFO: Uvicorn running on http://0.0.0.0:7860
+```
 
-   ```python
-   # 1️⃣ Insert your Ngrok Authtoken here
-   NGROK_AUTH_TOKEN = "[YOUR_AUTH_TOKEN_NGROK]"
-   ```
-
-4. **Run the Cell**  
-   After configuring the token, execute the cell in Google Colab. You will receive an output similar to this, containing the public API URL:
-
-   ```bash
-   Requirement already satisfied: pyngrok in /usr/local/lib/python3.12/dist-packages (7.4.0)
-   Requirement already satisfied: PyYAML>=5.1 in /usr/local/lib/python3.12/dist-packages (from pyngrok) (6.0.2)
-   [INFO] Using device: cuda
-   Loading pipeline components...: 100% 6/6 [00:21<00:00, 4.12s/it]
-   [INFO] **Public API available at: NgrokTunnel:** "https://uncallused-....dev" -> "http://localhost:7860"
-   INFO: Started server process [341]
-   INFO: Waiting for application startup.
-   INFO: Application startup complete.
-   INFO: Uvicorn running on http://0.0.0.0:7860 (Press CTRL+C to quit)
-   ```
-
-5. **Copy the Public URL**  
-   Copy the public URL provided in the output (e.g., `https://uncallused-....dev`) and paste it into your `.env` configuration file:
-
+7. Copy the public ngrok URL (e.g., `https://abcd1234.ngrok-free.app`)
+8. In the frontend’s `.env` file (project root), add:
    ```env
-   GOOGLE_COLAB_URL = "https://uncallused-....dev"
+   GOOGLE_COLAB_URL="https://abcd1234.ngrok-free.app"
    ```
 
-## Conclusion
 
-Done! Your **NFT 4U** instance is now running and accessible via the public API.
+```markdown
+[![NFT 4U – Demo Video](https://img.youtube.com/vi/SEU_VIDEO_AQUI/maxresdefault.jpg)](https://www.youtube.com/watch?v=SEU_VIDEO_AQUI)
+```
+
+*(Just replace `SEU_VIDEO_AQUI` with your actual YouTube video ID)*
+
+## 🎉 Done! Everything is running!
+
+You now have:
+- Next.js frontend running locally
+- AI backend with SDXL Turbo on Google Colab
+- Public API exposed via NGROK
+- Prompt-to-image generation
+- System ready for NFT minting on blockchain
+
