@@ -1,4 +1,4 @@
-```markdown
+
 # NFT 4U – AI Generated NFT Creator
 **IA382A – Seminars in Computer Engineering**
 
