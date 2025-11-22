@@ -12,7 +12,7 @@ Blockchain** to create an innovative digital product.
 ## 🎥 Demo Video
 
 
-[![Demonstração em vídeo](https://www.youtube.com/watch?v=Uxuyz1IH6UA)](https://www.youtube.com/watch?v=Uxuyz1IH6UA)
+[![Demonstração em vídeo](https://www.youtube.com/watch?v=Uxuyz1IH6UA)](https://www.youtube.com/watch?v=Uxuyz1IH6UA)]
 
 
 ### ✨ dApp Features
