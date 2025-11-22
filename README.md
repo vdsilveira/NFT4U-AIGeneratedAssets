@@ -11,8 +11,13 @@ Blockchain** to create an innovative digital product.
 
 ## 🎥 Demo Video
 
+[![NFT 4U – Full Demo (click to watch on YouTube)](https://img.youtube.com/vi/Uxuyz1IH6UA/maxresdefault.jpg)](https://www.youtube.com/watch?v=Uxuyz1IH6UA)
+
 
 [![Demonstração em vídeo](https://www.youtube.com/watch?v=Uxuyz1IH6UA)](https://www.youtube.com/watch?v=Uxuyz1IH6UA)]
+
+*Watch the complete demonstration: from text prompt to AI-generated image and NFT minting preparation (1:30 min)*
+
 
 
 ### ✨ dApp Features
